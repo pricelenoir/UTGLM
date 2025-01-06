@@ -9,6 +9,10 @@ dist/
 web-build/
 expo-env.d.ts
 
+# expo prebuild (need to rerun 'expo prebuild' to rebuild these directories)
+ios/
+android/
+
 # Native
 *.orig.*
 *.jks
