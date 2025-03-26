@@ -17,6 +17,11 @@ def main():
     data_buffer = bytearray()
     num_frames_parsed = 0
 
+    ser.reset_input_buffer()   # Clears any unread data in the input buffer
+    ser.reset_output_buffer()  # Clears any unsent data in the output buffer
+
+    maxVelo = 0
+
     while True:
         try:
             # Read available data from the serial port
@@ -51,6 +56,9 @@ def main():
                         for i in range(num_det_obj):
                             print(f"Object {i}: X={detected_x_array[i]}, Y={detected_y_array[i]}, Z={detected_z_array[i]}, "
                                   f"Velocity={detected_v_array[i]}, SNR={detected_snr_array[i]}, Noise={detected_noise_array[i]}")
+                            if (detected_v_array[i] > maxVelo):
+                                maxVelo = detected_v_array[i]
+                            print(f"Max Velo = {maxVelo}")
 
                         # Remove parsed bytes from the buffer
                         del data_buffer[:header_start_index + total_packet_num_bytes]

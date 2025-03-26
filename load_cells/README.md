@@ -50,4 +50,41 @@ The ADS1256 is a high-precision 24-bit analog-to-digital converter (ADC) module 
 
 ![ADS1256](references/ads1256.jpg)
 
----
+
+## Raspberry Pi Set-up
+NOTE: This is how to flash the operating system onto the Raspberry Pi and install all necessary dependencies. You should only have to do this once for a new Raspberry Pi.
+1. **Raspberry Pi Imager**: Download and install [Raspberry Pi Imager](https://www.raspberrypi.org/software/).
+2. **Flash Operating System**: 
+   - Insert microSD card into reader and open Imager.
+   - Select correct device model.
+   - Select Raspberry Pi OS (64-bit).
+   - Select microSD card reader as storage.
+   - Edit custom OS settings:
+      - **Hostname**: Use default hostname (raspberrypi.local).
+      - **Login**: Set username and password for remote login.
+      - **Network**: Select Configure wireless LAN.
+      - **Enable SSH**: In the services tab, enable SSH with password authentication.
+      - **Save and apply custom OS settings**
+3. **Ping Raspberry Pi**: Power the board on and check for a connection.
+```bash
+ping raspberrypi.local
+```
+4. **SSH into Raspberry Pi**: Use SSH to access the Raspberry Pi for remote development.
+```bash
+ssh-keygen -R raspberrypi.local
+ssh pi@raspberrypi.local
+```
+5. **Install Git**: Update and install git to pull UTGLM repo.
+```bash
+pi@raspberrypi:~ $ sudo apt-get update
+pi@raspberrypi:~ $ sudo apt-get install -y git
+```
+6. **Pull Git repository**: Clone UTGLM code base.
+```bash
+pi@raspberrypi:~ $ git clone https://github.com/pricelenoir/UTGLM.git
+```
+7. **Run setup script**:
+```bash
+cd UTGLM/load_cells
+sh setup.sh
+```
