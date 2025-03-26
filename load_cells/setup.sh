@@ -2,8 +2,8 @@
 set -e
 
 # Verify we are in the correct directory
-if [ "$(basename "$PWD")" != "glm" ]; then
-    echo "Error: Script must be run from within the 'glm' directory."
+if [ "$(basename "$PWD")" != "load_cells" ]; then
+    echo "Error: Script must be run from within the 'load_cells' directory."
     exit 1
 fi
 
