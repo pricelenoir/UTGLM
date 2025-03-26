@@ -1,7 +1,6 @@
-import config
-import RPi.GPIO as GPIO
-
 # Description: This file defines a Python class and associated constants for interacting with the ADS1256, an analog-to-digital converter (ADC).
+from src import config
+import RPi.GPIO as GPIO
 
 class ADS1256:
     ScanMode = 0 # Tracks the scanning mode (single-ended/differential)

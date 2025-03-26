@@ -1,13 +1,13 @@
-# /*****************************************************************************
+# *****************************************************************************
 # * | File        :	  EPD_1in54.py
 # * | Author      :   Waveshare team
 # * | Function    :   Hardware underlying interface
 # * | Info        :
 # *----------------
-# * |	This version:   V1.0
+# * | This version:   V1.0
 # * | Date        :   2019-01-24
 # * | Info        :   
-# ******************************************************************************/
+# ******************************************************************************
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documnetation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -25,14 +25,11 @@
 # LIABILITY WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-#
-
-
+# ******************************************************************************
+# Description: Module containing configuration methods and constants like digital_write, spi_writebyte, etc.
 import spidev
 import RPi.GPIO as GPIO
 import time
-
-# Description: Module containing configuration methods and constants like digital_write, spi_writebyte, etc.
 
 # Pin definition
 RST_PIN  = 18
