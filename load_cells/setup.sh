@@ -12,8 +12,9 @@ sudo apt-get update
 
 echo "Installing software..."
 sudo apt-get install -y git
-sudo apt-get install -y vim # Text editor of choice
+sudo apt-get install -y vim
 sudo apt-get install -y python3-pip
+sudo apt-get install -y python3-tk
 
 echo "Creating Python virtual environment..."
 python3 -m venv venv

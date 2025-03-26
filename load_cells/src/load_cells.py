@@ -1,7 +1,3 @@
-import time
-import pandas as pd
-from src.ADS1256 import ADS1256
-
 # Function to convert raw ADC values (voltages) to weights
 def voltage_to_weight(voltage, slope, intercept):
     return voltage * slope + intercept

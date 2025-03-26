@@ -1,13 +1,14 @@
 import sys
 import json
-import pandas as pd
+import tkinter as tk
 import RPi.GPIO as GPIO
-from src import ADS1256
 from src import load_cells
+from src.ADS1256 import ADS1256
+from src.weight_balance_gui import WeightBalanceBoard
 
 def main():
     # Create an instance of the ADS1256 class
-    ads = ADS1256.ADS1256()
+    ads = ADS1256()
     ads.initialize()
 
     # Check if the command-line argument 'calibrate' is passed
@@ -22,14 +23,26 @@ def main():
         data = json.load(json_file)
     calibration_factors = {key: tuple(value) for key, value in data.items()}
 
+    # Create Tkinter root and weight balance board GUI
+    root = tk.Tk()
+    weight_board = WeightBalanceBoard(root)
+
     try:
-        while True:
+        def update_gui():
             # Read voltages from load cells
             voltages = load_cells.read_voltages(ads)
             
-            # Convert voltages to weights using the calibration factors
+            # Convert voltages to weights using calibration factors
             weights_dict = load_cells.convert_voltages_to_weights(voltages, calibration_factors)
-            print(weights_dict)
+            
+            # Update visualization
+            weight_board.update_visualization(voltages, weights_dict)
+            root.after(100, update_gui)  # Update every 100 ms
+
+        # Start the update loop and Tkinter event loop
+        update_gui()
+        root.mainloop()
+
     finally:
         GPIO.cleanup()
 

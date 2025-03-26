@@ -85,6 +85,11 @@ pi@raspberrypi:~ $ git clone https://github.com/pricelenoir/UTGLM.git
 ```
 7. **Run setup script**:
 ```bash
-cd UTGLM/load_cells
-sh setup.sh
+pi@raspberrypi:~ $ cd UTGLM/load_cells
+pi@raspberrypi:~/UTGLM/load_cells $ sh setup.sh
+```
+8. **Activate venv and run main**: Make sure you have connected the Raspberry Pi to a device via micro HDMI to view GUI.
+```bash
+pi@raspberrypi:~/UTGLM/load_cells $ source venv/bin/activate
+(venv) pi@raspberrypi:~/UTGLM/load_cells $ python main.py
 ```
