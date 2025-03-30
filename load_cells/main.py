@@ -2,6 +2,7 @@ import sys
 import json
 import tkinter as tk
 import RPi.GPIO as GPIO
+from src import calibrate
 from src import load_cells
 from src.ADS1256 import ADS1256
 from src.weight_balance_gui import WeightBalanceBoard
@@ -14,7 +15,7 @@ def main():
     # Check if the command-line argument 'calibrate' is passed
     if len(sys.argv) > 1 and sys.argv[1] == 'calibrate':
         print("Starting calibration...")
-        ads.calibrate()
+        calibrate(ads)
         print("Calibration complete.")
         return
 

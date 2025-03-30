@@ -12,45 +12,6 @@ All CAD files for the Dynamic Golf Board can be found in the **/references** dir
 
 ![Bending Analysis](references/bendingStudy.png)
 
-## How to Use
-
-1. **Hardware Setup**:
-    - Connect the 4 load cells to the Raspberry Pi via the AD/DA Expansion board.
-    - Ensure proper wiring as per the schematic below.
-  
-2. **Calibration**:
-    - Use the command below to run a script to calibrate each load cell individually. This will establish the calibration factors for accurate weight readings.
-
-    ```bash
-    python main.py calibrate
-    ```
-
-3. **HDMI Output**
-    - Use the Raspberry Pi's HDMI port to connect to a tablet/screen to view output.
-
-4. **Running the Program**:
-    - Run the main program to start reading weight values from each load cell.
-    - The system will record the weights during the swing, and center of mass calculations will be performed.
-
-    ```bash
-    python main.py
-    ```
-
-## Wiring Schematic
-
-![Wiring Schematic](references/wiringDiagram.png)
-
-- **Load Cells**: Wired to the AD/DA Expansion board.
-- **Raspberry Pi**: Connected to the AD/DA Expansion board, which handles the analog-to-digital conversion for precise load cell readings.
-
-Ensure all connections follow the wiring diagram for proper functionality.
-
-## AD/DA Expansion Board: ADS1256
-The ADS1256 is a high-precision 24-bit analog-to-digital converter (ADC) module that enables the Raspberry Pi to interface with analog sensors. In this project, the ADS1256 is used to connect load cells to the Raspberry Pi, allowing for accurate measurement of weight or force. The module's high resolution and built-in programmable gain amplifier make it ideal for reading the small voltage changes produced by load cells. This extends the Raspberry Pi's capabilities, which lacks native support for analog signal processing.
-
-![ADS1256](references/ads1256.jpg)
-
-
 ## Raspberry Pi Set-up
 NOTE: This is how to flash the operating system onto the Raspberry Pi and install all necessary dependencies. You should only have to do this once for a new Raspberry Pi.
 1. **Raspberry Pi Imager**: Download and install [Raspberry Pi Imager](https://www.raspberrypi.org/software/).
@@ -88,8 +49,44 @@ pi@raspberrypi:~ $ git clone https://github.com/pricelenoir/UTGLM.git
 pi@raspberrypi:~ $ cd UTGLM/load_cells
 pi@raspberrypi:~/UTGLM/load_cells $ sh setup.sh
 ```
-8. **Activate venv and run main**: Make sure you have connected the Raspberry Pi to a device via micro HDMI to view GUI.
+
+## How to Use
+
+1. **Hardware Setup**:
+    - Connect the 4 load cells to the Raspberry Pi via the AD/DA Expansion board.
+    - Ensure proper wiring as per the schematic below.
+
+2. **HDMI Output**
+    - Use the Raspberry Pi's HDMI port to connect to a tablet/screen to view output.
+  
+3. **Calibration**:
+    - Use the command below to run a script to calibrate each load cell individually. This will establish the calibration factors for accurate weight readings. You will be prompted to place specified weights on each load cell.
+    - You will need to activate the virtual environment with all required dependencies to run the program.
+
 ```bash
+pi@raspberrypi:~ $ cd UTGLM/load_cells
 pi@raspberrypi:~/UTGLM/load_cells $ source venv/bin/activate
-(venv) pi@raspberrypi:~/UTGLM/load_cells $ python main.py
+(venv)pi@raspberrypi:~/UTGLM/load_cells $ python main.py calibrate
 ```
+
+4. **Running the Program**:
+    - Run the main program to start reading weight values from each load cell.
+    - The system will record the weights during the swing, and center of mass calculations will be performed.
+
+```bash
+(venv)pi@raspberrypi:~/UTGLM/load_cells $ python main.py
+```
+
+## Wiring Schematic
+
+![Wiring Schematic](references/wiringDiagram.png)
+
+- **Load Cells**: Wired to the AD/DA Expansion board.
+- **Raspberry Pi**: Connected to the AD/DA Expansion board, which handles the analog-to-digital conversion for precise load cell readings.
+
+Ensure all connections follow the wiring diagram for proper functionality.
+
+## AD/DA Expansion Board: ADS1256
+The ADS1256 is a high-precision 24-bit analog-to-digital converter (ADC) module that enables the Raspberry Pi to interface with analog sensors. In this project, the ADS1256 is used to connect load cells to the Raspberry Pi, allowing for accurate measurement of weight or force. The module's high resolution and built-in programmable gain amplifier make it ideal for reading the small voltage changes produced by load cells. This extends the Raspberry Pi's capabilities, which lacks native support for analog signal processing.
+
+![ADS1256](references/ads1256.jpg)

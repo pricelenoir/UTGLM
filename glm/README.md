@@ -4,7 +4,7 @@ This directory contains all necessary files to operate the **Golf Launch Monitor
 
 ## Overview
 
-The **Golf Launch Monitor** utilizes a **Raspberry Pi 4** connected to the **Texas Instruments IWR6843ISK radar module** via a USB to micro-USB cable. The radar module is configured for our specific application and outputs serialized sensor data to the Raspberry Pi via COM port. The Raspberry Pi handles all data input and processing and outputs individual shot metrics via Bluetooth to an iOS application for further analysis and display.
+The **Golf Launch Monitor** utilizes a **Raspberry Pi 5** connected to the **Texas Instruments IWR6843ISK radar module** via a USB to micro-USB cable. The radar module is configured for our specific application and outputs serialized sensor data to the Raspberry Pi via COM port. The Raspberry Pi handles all data input and processing and outputs individual shot metrics via Bluetooth to an iOS application for further analysis and display.
 
 
 ## Setup Instructions
