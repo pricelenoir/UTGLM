@@ -7,7 +7,7 @@ def convert_voltages_to_weights(voltages, calibration_factors):
     weights_dict = {}
     for key, voltage_list in voltages.items():
         slope, intercept = calibration_factors[key]
-        weights = [voltage_to_weight(voltage, slope, intercept) for voltage in voltage_list]
+        weights = [max(0, voltage_to_weight(voltage, slope, intercept)) for voltage in voltage_list]
         weights_dict[key] = weights
     return weights_dict
 
