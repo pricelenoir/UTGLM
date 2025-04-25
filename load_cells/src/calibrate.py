@@ -5,7 +5,7 @@ import json
 import os
 
 def calibrate(ads):
-    weights = [0, 5, 10, 25, 50]  # Example weights in pounds
+    weights = [0, 2.5, 5, 10, 15, 30]  # Weights in pounds to calibrate (adjust as needed)
     calibration_results = {}
     
     # Define differential channel pairs with their names
@@ -24,9 +24,12 @@ def calibrate(ads):
         
         for weight in weights:
             input(f"Place {weight} pounds on load cell for {channel_name} and press 'Enter'.")
-            raw_adc_value = ads.get_diff_channel_value(ch_pair)
+            
+            # Take 10 samples and average them
+            raw_adc_value = np.mean([ads.get_diff_channel_value(ch_pair) for _ in range(10)])
             adc_values.append(raw_adc_value)
-            print(f"Weight: {weight} lbs - ADC value: {raw_adc_value}")
+            
+            print(f"Weight: {weight} lbs - Averaged ADC value: {raw_adc_value:.2f}")
         
         # Perform linear regression for this channel
         slope, intercept, r_value, p_value, std_err = linregress(adc_values, weights)
@@ -40,16 +43,16 @@ def calibrate(ads):
         print(f"R-squared: {r_value**2:.6f}")
         
         # Plot calibration curve for this channel
-        plt.figure(figsize=(10, 6))
-        plt.scatter(adc_values, weights, color='blue', label='Calibration Data')
-        plt.plot(adc_values, [slope * x + intercept for x in adc_values], color='red', label='Fitted Line')
+        # plt.figure(figsize=(10, 6))
+        # plt.scatter(adc_values, weights, color='blue', label='Calibration Data')
+        # plt.plot(adc_values, [slope * x + intercept for x in adc_values], color='red', label='Fitted Line')
         
-        plt.title(f'Load Cell Calibration Curve - {channel_name}')
-        plt.xlabel('ADC Value')
-        plt.ylabel('Weight (pounds)')
-        plt.legend()
-        plt.grid(True)
-        plt.show()
+        # plt.title(f'Load Cell Calibration Curve - {channel_name}')
+        # plt.xlabel('ADC Value')
+        # plt.ylabel('Weight (pounds)')
+        # plt.legend()
+        # plt.grid(True)
+        # plt.show()
     
     # Write calibration parameters to JSON file
     with open('calibration.json', 'w') as json_file:

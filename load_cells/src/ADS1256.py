@@ -160,8 +160,9 @@ class ADS1256:
         if id != 3:
             print("ID Read failed")
             return -1
-        # Correctly setting the gain to 8
-        self.config_ADC(self.GAIN_E['GAIN_8'], self.DATA_RATE_E['3750SPS'])
+        
+        # Adjust gain and sample rate as needed
+        self.config_ADC(self.GAIN_E['GAIN_4'], self.DATA_RATE_E['100SPS'])
         return 0
     
     # Reads raw data from ADC
