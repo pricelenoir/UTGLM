@@ -16,18 +16,14 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] == 'calibrate':
         print("Starting calibration...")
         calibrate(ads)
-        print("Calibration complete.")
         return
 
-    # Read calibration factors from JSON (the slope and intercept to convert raw ADC readings to weight)
+    # Read calibration factors and zero load offsets from JSON
     with open('calibration.json', 'r') as json_file:
         data = json.load(json_file)
     
-    calibration_factors_raw = data['calibration_factors']
+    calibration_factors = data['calibration_factors']  # Now calibration_factors is just {key: slope}
     zero_load_offsets = data['zero_load_offsets']
-
-    # Convert calibration factors to (slope, intercept) tuples
-    calibration_factors = {key: tuple(value) for key, value in data.items()}
 
     # Create Tkinter root and weight balance board GUI
     root = tk.Tk()
@@ -37,14 +33,14 @@ def main():
 
     try:
         def update_gui():
-            # Read voltages from load cells
-            voltages = load_cells.read_voltages(ads)
+            # Read ADC values from load cells
+            adc_values = load_cells.read_adc_values(ads)
             
-            # Convert voltages to weights using calibration factors
-            weights_dict = load_cells.convert_voltages_to_weights(voltages, calibration_factors, zero_load_offsets)
+            # Convert ADC values to weights using calibration factors
+            weights_dict = load_cells.convert_adc_to_weights(adc_values, calibration_factors, zero_load_offsets)
             
             # Update visualization
-            weight_board.update_visualization(voltages, weights_dict)
+            weight_board.update_visualization(adc_values, weights_dict)
             root.after(100, update_gui)  # Update every 100 ms
 
         # Start the update loop and Tkinter event loop
