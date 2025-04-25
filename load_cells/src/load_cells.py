@@ -1,13 +1,15 @@
 # Function to convert raw ADC values (voltages) to weights
-def voltage_to_weight(voltage, slope, intercept):
+def voltage_to_weight(voltage, slope, intercept, zero_offet):
+    corrected_voltage = voltage - zero_offet
     return voltage * slope + intercept
 
 # Function to convert the voltages into weights using calibration factors
-def convert_voltages_to_weights(voltages, calibration_factors):
+def convert_voltages_to_weights(voltages, calibration_factors, zero_load_offsets):
     weights_dict = {}
     for key, voltage_list in voltages.items():
         slope, intercept = calibration_factors[key]
-        weights = [max(0, voltage_to_weight(voltage, slope, intercept)) for voltage in voltage_list]
+        zero_offset = zero_load_offsets[key]
+        weights = [max(0, voltage_to_weight(voltage, slope, intercept, zero_offset)) for voltage in voltage_list]
         weights_dict[key] = weights
     return weights_dict
 

@@ -162,7 +162,7 @@ class ADS1256:
             return -1
         
         # Adjust gain and sample rate as needed
-        self.config_ADC(self.GAIN_E['GAIN_4'], self.DATA_RATE_E['100SPS'])
+        self.config_ADC(self.GAIN_E['GAIN_64'], self.DATA_RATE_E['30SPS'])
         return 0
     
     # Reads raw data from ADC
@@ -186,9 +186,3 @@ class ADS1256:
         self.write_cmd(self.CMD['SYNC'])
         self.write_cmd(self.CMD['WAKEUP'])
         return self.read_ADC_data()
-    
-    # Adjust gain and and channel settings to calibrate the load cell
-    def calibrate(self):
-        self.config_ADC(self.GAIN_E['GAIN_4'], self.DATA_RATE_E['ADS1256_30000SPS'])
-        self.get_diff_channel_value(self, 2)
-        return

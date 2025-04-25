@@ -1,14 +1,12 @@
+import json
 import numpy as np
 from scipy.stats import linregress
-import matplotlib.pyplot as plt
-import json
-import os
 
 def calibrate(ads):
-    weights = [0, 2.5, 5, 10, 15, 30]  # Weights in pounds to calibrate (adjust as needed)
-    calibration_results = {}
-    
-    # Define differential channel pairs with their names
+    weights = [0, 2.5, 5, 10, 15, 20, 25, 30]  # Calibration weights in pounds
+    calibration_factors = {}
+    zero_load_offsets = {}
+
     diff_channels = {
         0: "Differential 0-1",
         1: "Differential 2-3",
@@ -16,48 +14,36 @@ def calibrate(ads):
         3: "Differential 6-7"
     }
     
-    # Collect data for each differential channel pair
     for ch_pair in range(4):
         channel_name = diff_channels[ch_pair]
         print(f"\nCalibrating {channel_name}...")
         adc_values = []
         
-        for weight in weights:
+        for i, weight in enumerate(weights):
             input(f"Place {weight} pounds on load cell for {channel_name} and press 'Enter'.")
-            
-            # Take 10 samples and average them
+
             raw_adc_value = np.mean([ads.get_diff_channel_value(ch_pair) for _ in range(10)])
             adc_values.append(raw_adc_value)
-            
+
             print(f"Weight: {weight} lbs - Averaged ADC value: {raw_adc_value:.2f}")
+            
+            if weight == 0:
+                zero_load_offsets[channel_name] = raw_adc_value  # Save zero-load offset
         
-        # Perform linear regression for this channel
-        slope, intercept, r_value, p_value, std_err = linregress(adc_values, weights)
+        # Perform linear regression
+        slope, intercept, *_ = linregress(adc_values, weights)  # Ignore r_value, p_value, std_err
         
-        # Store calibration parameters
-        calibration_results[channel_name] = [slope, intercept]
+        # Save slope and intercept
+        calibration_factors[channel_name] = [slope, intercept]
         
-        # Display calibration results for this channel
-        print(f"Calibration for {channel_name}:")
-        print(f"Equation: weight = ({slope:.6f} * ADC Value) + {intercept:.6f}")
-        print(f"R-squared: {r_value**2:.6f}")
-        
-        # Plot calibration curve for this channel
-        # plt.figure(figsize=(10, 6))
-        # plt.scatter(adc_values, weights, color='blue', label='Calibration Data')
-        # plt.plot(adc_values, [slope * x + intercept for x in adc_values], color='red', label='Fitted Line')
-        
-        # plt.title(f'Load Cell Calibration Curve - {channel_name}')
-        # plt.xlabel('ADC Value')
-        # plt.ylabel('Weight (pounds)')
-        # plt.legend()
-        # plt.grid(True)
-        # plt.show()
-    
-    # Write calibration parameters to JSON file
+    # Write calibration factors and zero load offsets to JSON
+    final_data = {
+        "calibration_factors": calibration_factors,
+        "zero_load_offsets": zero_load_offsets
+    }
+
     with open('calibration.json', 'w') as json_file:
-        json.dump(calibration_results, json_file, indent=4)
+        json.dump(final_data, json_file, indent=4)
     
-    print("\nCalibration complete! Parameters saved to 'calibration.json'")
-    
-    return calibration_results
+    print("\nCalibration complete! Parameters and zero load offsets saved to 'calibration.json'.")
+    return final_data

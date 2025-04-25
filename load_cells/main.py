@@ -2,7 +2,7 @@ import sys
 import json
 import tkinter as tk
 import RPi.GPIO as GPIO
-from src import calibrate
+from src.calibrate import calibrate
 from src import load_cells
 from src.ADS1256 import ADS1256
 from src.weight_balance_gui import WeightBalanceBoard
@@ -22,6 +22,11 @@ def main():
     # Read calibration factors from JSON (the slope and intercept to convert raw ADC readings to weight)
     with open('calibration.json', 'r') as json_file:
         data = json.load(json_file)
+    
+    calibration_factors_raw = data['calibration_factors']
+    zero_load_offsets = data['zero_load_offsets']
+
+    # Convert calibration factors to (slope, intercept) tuples
     calibration_factors = {key: tuple(value) for key, value in data.items()}
 
     # Create Tkinter root and weight balance board GUI
@@ -36,7 +41,7 @@ def main():
             voltages = load_cells.read_voltages(ads)
             
             # Convert voltages to weights using calibration factors
-            weights_dict = load_cells.convert_voltages_to_weights(voltages, calibration_factors)
+            weights_dict = load_cells.convert_voltages_to_weights(voltages, calibration_factors, zero_load_offsets)
             
             # Update visualization
             weight_board.update_visualization(voltages, weights_dict)
