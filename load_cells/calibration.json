@@ -1,6 +1,14 @@
 {
-    "Differential 0-1": [0.005255402508804553, -32.77118234095868],
-    "Differential 2-3": [0.0064694839574558245, -35.8680578828282],
-    "Differential 4-5": [0.006428018984246993, -134.56260257211812],
-    "Differential 6-7": [0.008134870987764936, -49.37097264202684]
+    "calibration_factors": {
+        "Differential 0-1": 0.0010335684292742647, 
+        "Differential 2-3": 0.0010764178376348119,
+        "Differential 4-5": 0.0011944428751114872,
+        "Differential 6-7": 0.0012058731736136453
+    },
+    "zero_load_offsets": {
+        "Differential 0-1": 32684.2,
+        "Differential 2-3": 78548.1,
+        "Differential 4-5": 131856.4,
+        "Differential 6-7": 67504.9
+    }
 }

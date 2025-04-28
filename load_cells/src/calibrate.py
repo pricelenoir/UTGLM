@@ -33,8 +33,13 @@ def calibrate(ads):
                 zero_load_offsets[channel_name] = raw_adc_value  # Save zero-load offset
         
         # Perform linear regression to get slope
-        slope, *_ = linregress(adc_values, weights)
+        slope, intercept, r_value, *_ = linregress(adc_values, weights)
         calibration_factors[channel_name] = slope
+
+        print(f"Calibration results for {channel_name}:")
+        print(f"  Slope (lbs/ADC unit): {slope:.10f}")
+        print(f"  Zero load offset: {zero_load_offsets[channel_name]:.1f}")
+        print(f"  R-squared: {r_value**2:.6f}")
         
     # Write calibration factors and zero load offsets to JSON
     final_data = {

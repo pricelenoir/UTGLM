@@ -3,7 +3,7 @@ import json
 import tkinter as tk
 import RPi.GPIO as GPIO
 from src.calibrate import calibrate
-from src import load_cells
+from src.load_cells import read_adc_values, convert_adc_to_weights
 from src.ADS1256 import ADS1256
 from src.weight_balance_gui import WeightBalanceBoard
 
@@ -22,7 +22,7 @@ def main():
     with open('calibration.json', 'r') as json_file:
         data = json.load(json_file)
     
-    calibration_factors = data['calibration_factors']  # Now calibration_factors is just {key: slope}
+    calibration_factors = data['calibration_factors']
     zero_load_offsets = data['zero_load_offsets']
 
     # Create Tkinter root and weight balance board GUI
@@ -34,14 +34,14 @@ def main():
     try:
         def update_gui():
             # Read ADC values from load cells
-            adc_values = load_cells.read_adc_values(ads)
+            adc_values = read_adc_values(ads)
             
             # Convert ADC values to weights using calibration factors
-            weights_dict = load_cells.convert_adc_to_weights(adc_values, calibration_factors, zero_load_offsets)
+            weights_dict = convert_adc_to_weights(adc_values, calibration_factors, zero_load_offsets)
             
             # Update visualization
             weight_board.update_visualization(adc_values, weights_dict)
-            root.after(100, update_gui)  # Update every 100 ms
+            root.after(20, update_gui) # Update every 20 ms
 
         # Start the update loop and Tkinter event loop
         update_gui()

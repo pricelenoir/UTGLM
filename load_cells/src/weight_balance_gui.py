@@ -67,6 +67,30 @@ class WeightBalanceBoard:
         self.heatmap_id = None
         self.com_id = None
 
+    def draw_load_cells(self, draw):
+        load_cell_colors = {
+            'top_right': '#3498db',     # Blue
+            'bottom_right': '#2ecc71',  # Green
+            'top_left': '#e74c3c',      # Red
+            'bottom_left': '#f39c12'    # Orange
+        }
+
+        for idx, (name, (x, y)) in enumerate(self.load_cell_points.items()):
+            color = load_cell_colors[name]
+
+            # Draw outer circle
+            r_outer = 8
+            draw.ellipse([x - r_outer, y - r_outer, x + r_outer, y + r_outer], outline=color, width=2, fill='black')
+            # Draw inner circle
+            r_inner = 3
+            draw.ellipse([x - r_inner, y - r_inner, x + r_inner, y + r_inner], fill=color)
+
+        # Label nearby with differential channel
+        diff_label = f"DIFF {idx * 2}-{idx * 2 + 1}"
+        label_offset_x = -30 if 'left' in name else 30
+        label_offset_y = -20 if 'top' in name else 20
+        draw.text((x + label_offset_x, y + label_offset_y), diff_label, fill=color)
+
     def create_static_background(self):
         img = Image.new("RGB", (self.canvas_width, self.canvas_height), "black")
         draw = ImageDraw.Draw(img)
@@ -82,6 +106,7 @@ class WeightBalanceBoard:
             draw.line([x, self.board_top, x, self.board_bottom], fill="#2c3e50", width=1)
             draw.line([self.board_left, y, self.board_right, y], fill="#2c3e50", width=1)
 
+        self.draw_load_cells(draw)
         return ImageTk.PhotoImage(img)
 
     def generate_heatmap(self, weights):
@@ -95,7 +120,8 @@ class WeightBalanceBoard:
 
         total_weight = top_right + bottom_right + top_left + bottom_left
         if total_weight == 0:
-            total_weight = 1.0
+            heatmap[:,:] = [0, 128, 0]
+            return Image.fromarray(heatmap)
 
         for y in range(size):
             for x in range(size):
