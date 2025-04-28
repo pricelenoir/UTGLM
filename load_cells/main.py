@@ -28,7 +28,7 @@ def main():
     # Create Tkinter root and weight balance board GUI
     root = tk.Tk()
     root.configure(bg='black')
-    root.title("Golf Swing Balance Analyzer - Testing Mode")
+    root.title("Golf Swing Balance Analyzer")
     weight_board = WeightBalanceBoard(root)
 
     try:
