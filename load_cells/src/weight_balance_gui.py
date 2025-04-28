@@ -85,11 +85,11 @@ class WeightBalanceBoard:
             r_inner = 3
             draw.ellipse([x - r_inner, y - r_inner, x + r_inner, y + r_inner], fill=color)
 
-        # Label nearby with differential channel
-        diff_label = f"DIFF {idx * 2}-{idx * 2 + 1}"
-        label_offset_x = -30 if 'left' in name else 30
-        label_offset_y = -20 if 'top' in name else 20
-        draw.text((x + label_offset_x, y + label_offset_y), diff_label, fill=color)
+            # Label nearby with differential channel
+            diff_label = f"DIFF {idx * 2}-{idx * 2 + 1}"
+            label_offset_x = -30 if 'left' in name else 30
+            label_offset_y = -20 if 'top' in name else 20
+            draw.text((x + label_offset_x, y + label_offset_y), diff_label, fill=color)
 
     def create_static_background(self):
         img = Image.new("RGB", (self.canvas_width, self.canvas_height), "black")
