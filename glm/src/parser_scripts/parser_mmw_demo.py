@@ -185,18 +185,18 @@ def parser_one_mmw_demo_output_packet(data, readNumBytes):
 
         if headerStartIndex + totalPacketNumBytes > readNumBytes:
             result = TC_FAIL
-            print(f"Bytes read: {readNumBytes}, Expected: {totalPacketNumBytes}")
+            # print(f"Bytes read: {readNumBytes}, Expected: {totalPacketNumBytes}")
 
-            print("********** Frame Fail, readNumBytes may not long enough ***********")
+            # print("********** Frame Fail, readNumBytes may not long enough ***********")
         elif nextHeaderStartIndex + 8 < readNumBytes and checkMagicPattern(data[nextHeaderStartIndex:nextHeaderStartIndex+8:1]) == 0:
             result = TC_FAIL
-            print("********** Frame Fail, incomplete packet **********") 
+            # print("********** Frame Fail, incomplete packet **********") 
         elif numDetObj <= 0:
             result = TC_FAIL
-            print("************ Frame Fail, numDetObj = %d *****************" % (numDetObj))
+            # print("************ Frame Fail, numDetObj = %d *****************" % (numDetObj))
         elif subFrameNumber > 3:
             result = TC_FAIL
-            print("************ Frame Fail, subFrameNumber = %d *****************" % (subFrameNumber))
+            # print("************ Frame Fail, subFrameNumber = %d *****************" % (subFrameNumber))
         else: 
             # process the 1st TLV
             tlvStart = headerStartIndex + headerNumBytes
@@ -295,7 +295,7 @@ def parser_one_mmw_demo_output_packet(data, readNumBytes):
             # end of if tlvType == 7
 
             # print("                  x(m)         y(m)         z(m)        v(m/s)    Com0range(m)  azimuth(deg)  elevAngle(deg)  snr(0.1dB)    noise(0.1dB)")
-            for obj in range(numDetObj):
-                print("    obj%3d: %12f %12f %12f %12f %12f %12f %12d %12d %12d" % (obj, detectedX_array[obj], detectedY_array[obj], detectedZ_array[obj], detectedV_array[obj], detectedRange_array[obj], detectedAzimuth_array[obj], detectedElevAngle_array[obj], detectedSNR_array[obj], detectedNoise_array[obj]))
+            # for obj in range(numDetObj):
+            #     print("    obj%3d: %12f %12f %12f %12f %12f %12f %12d %12d %12d" % (obj, detectedX_array[obj], detectedY_array[obj], detectedZ_array[obj], detectedV_array[obj], detectedRange_array[obj], detectedAzimuth_array[obj], detectedElevAngle_array[obj], detectedSNR_array[obj], detectedNoise_array[obj]))
 
     return (result, headerStartIndex, totalPacketNumBytes, numDetObj, numTlv, subFrameNumber, detectedX_array, detectedY_array, detectedZ_array, detectedV_array, detectedRange_array, detectedAzimuth_array, detectedElevAngle_array, detectedSNR_array, detectedNoise_array)

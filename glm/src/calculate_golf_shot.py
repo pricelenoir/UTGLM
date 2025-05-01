@@ -1,6 +1,10 @@
 import numpy as np
 
 def calculate_golf_shot(club_head_speed, club_type):
+    '''
+    Estimate the golf shot parameters based on club head speed (m/s) and club type.
+    '''
+
     # Club mass values (kg)
     club_masses = {
         'driver': 0.200,
@@ -12,10 +16,10 @@ def calculate_golf_shot(club_head_speed, club_type):
         '7i': 0.268,
         '8i': 0.275,
         '9i': 0.282,
-        'PW': 0.289,
-        'GW': 0.296,
-        'SW': 0.303,
-        'LW': 0.310
+        'pw': 0.289,
+        'gw': 0.296,
+        'sw': 0.303,
+        'lw': 0.310
     }
     
     # Club loft values (degrees)
@@ -29,10 +33,10 @@ def calculate_golf_shot(club_head_speed, club_type):
         '7i': 34,
         '8i': 38,
         '9i': 42,
-        'PW': 47,
-        'GW': 52,
-        'SW': 56,
-        'LW': 60
+        'pw': 47,
+        'gw': 52,
+        'sw': 56,
+        'lw': 60
     }
 
     # Constants
@@ -44,6 +48,7 @@ def calculate_golf_shot(club_head_speed, club_type):
     
     M = club_masses.get(club_type)
     loft = club_lofts.get(club_type)
+    club_head_speed = club_head_speed * 2.237  # Convert m/s to mph
 
     # Estimated Ball Speed
     vball = club_head_speed * (1 + e) * np.cos(np.radians(loft)) * (1 - 0.14 * miss) / (1 + (m / M))
@@ -114,15 +119,15 @@ def calculate_golf_shot(club_head_speed, club_type):
             
         i += 1
     
-    carry_distance = position_x * 1.09361  # convert m to yards
-    max_height_ft = max_height * 3.28084   # convert m to feet
+    carry_distance = position_x * 1.09361  # Convert m to yds
+    apex_height    = max_height * 3.28084  # Convert m to ft
     
     results = {
-        'carry_distance': round(carry_distance, 1),
-        'club_head_speed': club_head_speed,
-        'ball_speed': round(vball, 1),
-        'smash_factor': round(smash_factor, 3),
-        'max_height': round(max_height_ft, 1),
-        'launch_angle': round(launch_angle, 1),
+        'carry_distance': round(float(carry_distance), 1),
+        'club_head_speed': round(float(club_head_speed), 1),
+        'ball_speed': round(float(vball), 1),
+        'smash_factor': round(float(smash_factor), 2),
+        'launch_angle': round(float(launch_angle), 1),
+        'apex_height': round(float(apex_height), 1),
     }
     return results
