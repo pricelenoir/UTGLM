@@ -3,6 +3,8 @@ from PIL import Image, ImageTk, ImageDraw
 import numpy as np
 import colorsys
 import math
+import time
+import os
 
 class WeightBalanceBoard:
     def __init__(self, master):
@@ -66,6 +68,22 @@ class WeightBalanceBoard:
         # Placeholders for dynamic elements
         self.heatmap_id = None
         self.com_id = None
+
+        # Recording control
+        self.is_recording = False
+        self.recorded_data = []
+
+        # Recording control buttons
+        self.record_frame = tk.Frame(master, bg='black')
+        self.record_frame.pack(pady=10)
+
+        self.start_button = tk.Button(self.record_frame, text="Start Recording", bg="green", fg="white",
+                                      command=self.start_recording)
+        self.start_button.pack(side=tk.LEFT, padx=10)
+
+        self.stop_button = tk.Button(self.record_frame, text="Stop Recording", bg="gray", fg="white",
+                                     state=tk.DISABLED, command=self.stop_recording)
+        self.stop_button.pack(side=tk.LEFT, padx=10)
 
     def draw_load_cells(self, draw):
         load_cell_colors = {
@@ -225,3 +243,44 @@ class WeightBalanceBoard:
             hint_text += " | TOO FAR BACK"
 
         self.hint_label.config(text=hint_text)
+
+        if self.is_recording:
+            current_time = time.time()
+            timestamp = current_time - self.recording_start_time
+            self.recorded_data.append({
+                "timestamp": timestamp,
+                "com_x": com_x,
+                "com_y": com_y
+            })
+
+    def start_recording(self):
+        if self.is_recording:
+            return
+
+        self.is_recording = True
+        self.recorded_data = []
+        self.recording_start_time = time.time()
+        
+        self.start_button.config(state=tk.DISABLED, bg='gray')
+        self.stop_button.config(state=tk.NORMAL, bg='red')
+
+    def stop_recording(self):
+        if not self.is_recording:
+            return
+
+        self.is_recording = False
+
+        self.master.destroy()
+
+        self.save_and_render_video()
+    
+    def save_and_render_video(self):
+        if not self.recorded_data:
+            print("No frames to save.")
+            return
+
+        # TODO: Implement video saving and rendering logic.
+        timestamps = [d["timestamp"] for d in self.recorded_data]
+        raw_x_pixels = [d["com_x"] for d in self.recorded_data]
+        raw_y_pixels = [d["com_y"] for d in self.recorded_data]
+        print(self.recorded_data)
